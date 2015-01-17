@@ -1,0 +1,17 @@
+[Unit]
+Description=Default rTorrent Service
+After=etcd.service
+After=docker.service
+
+[Service]
+TimeoutStartSec=0
+ExecStartPre=-/usr/bin/docker pull edgard/rtorrent
+ExecStartPre=-/usr/bin/docker stop rtorrent
+ExecStartPre=-/usr/bin/docker kill rtorrent
+ExecStartPre=-/usr/bin/docker rm rtorrent
+ExecStart=/usr/bin/docker run --name rtorrent -p 80:80 -p 63256:63256 -v /srv/rtorrent:/data edgard/rtorrent
+
+ExecStop=/usr/bin/docker stop rtorrent
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,43 @@
+throttle.global_up.max_rate.set = 0
+throttle.global_down.max_rate.set = 0
+throttle.max_uploads.global.set = 0
+throttle.max_downloads.global.set = 0
+throttle.max_uploads.div.set = 0
+throttle.max_downloads.div.set = 0
+throttle.max_uploads.set = 0
+throttle.min_peers.normal.set = 100
+throttle.max_peers.normal.set = 200
+throttle.min_peers.seed.set = -1
+throttle.max_peers.seed.set = -1
+
+directory.default.set = /data/rtorrent/download
+session.path.set = /data/rtorrent/session
+
+encoding.add = UTF-8
+
+trackers.numwant.set = -1
+trackers.use_udp.set = yes
+dht.mode.set = disable
+protocol.pex.set = no
+protocol.encryption.set = allow_incoming,enable_retry,prefer_plaintext
+
+pieces.hash.on_completion.set = no
+pieces.preload.type.set = 1
+pieces.memory.max.set = 1024M
+
+network.scgi.open_port = 0.0.0.0:5000
+network.port_range.set = 63256-63256
+network.port_random.set = no
+network.http.max_open.set = 128
+network.http.ssl_verify_peer.set = 0
+network.max_open_files.set = 1024
+network.max_open_sockets.set = 1024
+network.send_buffer.size.set = 4M
+network.receive_buffer.size.set = 4M
+network.tos.set = throughput
+
+schedule = low_diskspace,5,60,close_low_diskspace=2048M
+
+schedule = tied_directory,5,5,start_tied=
+schedule = untied_directory,5,5,remove_untied=
+schedule = watch_directory,5,5,"load_start=/data/rtorrent/watch/*.torrent,d.delete_tied="

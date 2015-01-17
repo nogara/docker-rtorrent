@@ -1,0 +1,43 @@
+#!/bin/bash
+# -----------------------------------------------------------------------------
+# docker /start script
+# -----------------------------------------------------------------------------
+
+# Create dir structure
+if [ ! -d /data/config ]; then
+  mkdir -p /data/config
+fi
+
+if [ ! -d /data/rtorrent/download ]; then
+  mkdir -p /data/rtorrent/download
+fi
+
+if [ ! -d /data/rtorrent/session ]; then
+  mkdir -p /data/rtorrent/session
+fi
+
+if [ ! -d /data/rtorrent/watch ]; then
+  mkdir -p /data/rtorrent/watch
+fi
+
+# Remove stale rtorrent session lock
+if [ -f /data/rtorrent/session/rtorrent.lock ]; then
+  rm -f /data/rtorrent/session/rtorrent.lock
+fi
+
+# Create user and password
+user=${USER:-admin}
+
+if [ -z "$PASS" ]; then
+  pass=$(openssl rand -base64 8)
+  cryptpass=$(openssl passwd -crypt "$pass")
+else
+  pass=$PASS
+  cryptpass=$(openssl passwd -crypt "$PASS")
+fi
+
+echo "$user:$cryptpass" > /etc/nginx/htpasswd
+echo "*** Credentials: $user:$pass"
+
+# Run supervisor that in turn run the servers
+exec /usr/bin/supervisord -n
